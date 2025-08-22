@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preload" as="image" href="https://i.postimg.cc/KYgBVTvr/pueblo-minero-fondo.png">
+    <link rel="preload" as="image" href="https://i.postimg.cc/L4B9DsRq/pueblo-herrero-fondo.png">
+    <link rel="preload" as="image" href="https://i.postimg.cc/BbqRv4jb/joyeros-fondo.png">
+    <link rel="preload" as="image" href="https://i.postimg.cc/gJWsHsq6/Medieval-Castle-and-Market-Stall.png">
+</head>
+<body>
+    <div class="contenedor">
+        <h2>Mapa</h2>
+        <div class="recursos1">
+            <div> 
+                <lable>Nivel:</lable>
+                <span id="nivel">0</span>
+            </div>
+            <div class="item-texto"> 
+                <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">
+                <span id="coin">0</span>
+                <lable>/</lable>
+                <span id="coinnivel">10</span>
+            </div>
+            <div>
+                <lable>Días restantes:</lable>
+                <span id="dias">0</span>
+            </div>
+        </div>
+        <div class="recursos">
+            <div class="columna">
+                <div class="nombre-recurso">
+                    <div class="recurso-item barato">
+                        <img src="https://i.postimg.cc/RhbCPM08/Carbon.png" alt="Carbón" class="icono-recurso">
+                        <lable> Carbón</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/02F2D2FK/hierro.png" alt="Hierro" class="icono-recurso">
+                        <lable> Hierro</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/XJwHPXQz/menaoro.png" alt="Mena de Oro" class="icono-recurso nivel2">
+                        <lable class="nivel2"> Mena de Oro</lable> 
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/13FRH11C/Anillo.png" alt="Anillo" class="icono-recurso nivel3">
+                        <lable class="nivel3"> Anillo de Oro</lable>
+                    </div>
+                </div>
+                <div class="cantidad-recurso">
+                    <div class="recurso-item barato">
+                        <span id="madera" class="cantidad-recurso">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="hierro">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="menaoro" class="nivel2">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="anillo" class="nivel3">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="columna">
+                <div class="nombre-recurso">
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/wxWBxkkV/pico.png" alt="Picos" class="icono-recurso">
+                        <lable> Pico</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/63X7kLXX/lingoteoro.png" alt="Lingote de Oro" class="icono-recurso nivel2">
+                        <lable class="nivel2"> Lingote de Oro</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/4ddrWphf/corona.png" alt="Corona" class="icono-recurso nivel3">
+                        <lable class="nivel3"> Corona Real</lable>
+                    </div>
+                </div>
+                <div class="cantidad-recurso">
+                    <div class="recurso-item">
+                        <span id="hachas">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="lingoteoro" class="nivel2">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="corona" class="nivel3">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pueblos">
+            <button id="pueblomadera" class="pueblo-card" type="button" onclick="location.href='pueblomadera.html'">
+                <img class="pueblo-img" src="https://i.postimg.cc/jjZv2TP3/Chat-GPT-Image-Aug-18-2025-02-43-38-PM.png" alt="Pueblo de la Forja">
+                <span class="pueblo-nombre">Poblado Minero</span>
+            </button>
+            <button id="pueblohierro" class="pueblo-card" type="button" onclick="location.href='pueblohierro.html'">
+                <img class="pueblo-img" src="https://i.postimg.cc/SNyVpjBF/Village-Blacksmith-Forge-in-Daylight.png" alt="Pueblo de la Forja">
+                <span class="pueblo-nombre">Pueblo de la Forja</span>
+            </button>
+            <button id="pueblojoyas" class="pueblo-card nivel2" type="button" onclick="location.href='pueblojoyas.html'">
+                <img class="pueblo-img" src="https://i.postimg.cc/15GdSLC2/Charming-Countryside-Jewel-Shop.png" alt="Pueblo de la Forja">
+                <span class="pueblo-nombre">Pueblo de los Joyeros</span>
+            </button>
+            <button id="castillo" class="pueblo-card nivel3" type="button" onclick="location.href='castillo.html'">
+                <img class="pueblo-img" src="https://i.postimg.cc/3JNhxrGV/Medieval-Castle-in-a-Lush-Landscape.png" alt="Pueblo de la Forja">
+                <span class="pueblo-nombre">Castillo</span>
+            </button>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <button onclick="location.href='load.html'">Menu</button>      
+    </div>
+
+
+<div id="custom-alert-overlay" class="hidden"></div>
+<div id="custom-alert" class="hidden">
+  <div class="card">
+    <p id="custom-alert-msg"></p>
+    <button id="custom-alert-ok">OK</button>
+  </div>
+</div>
+    <script src="app.js"></script>
+</body>
+</html>

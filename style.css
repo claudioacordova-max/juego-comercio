@@ -1,0 +1,331 @@
+/* =========================
+   🎨 Paleta (variables)
+========================= */
+:root{
+  --c-text:#5b311a; --c-title:#b85c1e;
+  --c-paper:#f5e6cc; --c-paper-90:rgba(253,247,227,.90);
+  --c-bd1:#bda27a; --c-bd2:#e7c079; --c-bd3:#333;
+
+  --c-btn:#b85c1e; --c-btn-hover:#8f4315; --c-btn-active:#6a3f28;
+
+  /* Cards base */
+  --c-card-bd:#e7c079; --c-card-bg:#f7e9c9; --c-card-top:#cfa25a;
+
+  /* Compra / Venta (COMBINACIÓN 2) */
+  --c-compra-bd:#a65c4f; --c-compra-bg:#f3e0da; --c-compra-sh:#8c4438;
+  --c-venta-bd:#6c8b4a; --c-venta-bg:#e6f0dc; --c-venta-sh:#57723a;
+
+  --r-s:10px; --r-m:14px; --r-l:16px; --r-xl:20px;
+  --sh-1:0 4px 10px rgba(0,0,0,.2);
+  --sh-2:0 6px 14px rgba(0,0,0,.25);
+}
+
+:root{ --bg-url:url("https://i.postimg.cc/7DQkPr4q/Chat-GPT-Image-Aug-12-2025-06-15-43-PM.png"); }
+
+/* =========================
+   🌄 Fondo & tipografía
+========================= */
+body{
+  background-image:var(--bg-url); background-size:cover; background-position:center;
+  background-attachment:fixed; font-family:'Georgia',serif; color:var(--c-text);
+  font-size:clamp(18px,2.2vw,32px);
+}
+body::before{ content:""; position:fixed; inset:0; background:rgba(255,255,255,.18); pointer-events:none; }
+.hidden{ display:none; }
+.nivel2,.nivel3{ display:none; }
+
+/* =========================
+   🔔 Alerta
+========================= */
+#custom-alert-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; }
+#custom-alert{ position:fixed; inset:0; display:grid; place-items:center; display:none; }
+#custom-alert .card{
+  position:relative; text-align:center; font-weight:bold; color:var(--c-text);
+  background:var(--c-paper); padding:clamp(16px,3vw,24px) clamp(18px,4vw,30px);
+  border-radius:var(--r-l); min-width:min(320px,90vw); max-width:90%;
+  box-shadow:0 0 0 4px var(--c-bd1),0 0 0 8px var(--c-bd2),0 8px 24px rgba(0,0,0,.35);
+  font-size:clamp(1rem,2.5vw,1.5rem);
+}
+#custom-alert button{
+  margin-top:14px; padding:10px 22px; border:none; border-radius:var(--r-s);
+  background:var(--c-btn); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+  box-shadow:var(--sh-1); transition:transform .2s, box-shadow .2s, background .2s;
+}
+#custom-alert button:hover{ background:var(--c-btn-hover); transform:translateY(-2px); box-shadow:var(--sh-2); }
+#custom-alert button:active{ transform:translateY(1px); }
+
+/* =========================
+   🧱 Contenedores
+========================= */
+.contenedor,.contenedor2{
+  background:var(--c-paper-90); border-radius:15px; padding:clamp(12px,2.5vw,20px);
+  width:min(100%,1100px); margin:clamp(16px,4vw,50px) auto;
+  box-shadow:0 0 0 4px var(--c-bd1),0 0 0 8px var(--c-paper),0 0 0 12px var(--c-bd3);
+}
+.contenedor2{ box-shadow:0 0 0 4px var(--c-paper),0 0 0 8px var(--c-bd1); }
+h2{ text-align:center; font-weight:900; margin-top:10px; color:var(--c-title); font-size:clamp(1.6rem,6vw,3em); }
+
+/* =========================
+   🧰 Recursos
+========================= */
+.recursos1{
+  background:var(--c-paper); border-radius:15px; padding:10px 20px;
+  display:flex; justify-content:space-around; align-items:center;
+  max-width:80%; margin:20px auto; box-shadow:0 0 0 2px var(--c-bd1);
+}
+.recursos{ display:flex; justify-content:center; gap:clamp(12px,3vw,30px); padding:10px; }
+.columna{ flex:1; display:flex; flex-direction:row; justify-content:space-between; gap:20px; padding:0 10px; }
+.nombre-recurso,.cantidad-recurso{ display:flex; flex-direction:column; }
+.nombre-recurso{text-align:left;} .cantidad-recurso{text-align:right;}
+.recurso-item{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.icono-recurso{ width:30px; height:30px; object-fit:contain; vertical-align:baseline; }
+
+/* =========================
+   🗺️ Grids
+========================= */
+.pueblos{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:16px; margin-top:12px; justify-items:center; /* PATCH: centra las cards cuando hay pocas */
+}
+.comercio{
+  display:grid; gap:16px; margin-top:12px;
+  justify-content:center; justify-items:center; /* PATCH: centra ítems en su track */
+  grid-template-columns:repeat(auto-fit,minmax(220px,max-content));
+}
+
+/* =========================
+   🃏 Cards base
+========================= */
+.pueblo-card,.comercio-card{
+  appearance:none; border:2px solid var(--c-card-bd); border-radius:var(--r-m);
+  background:var(--c-card-bg); box-shadow:0 4px 0 var(--c-card-top),0 6px 14px rgba(0,0,0,.15);
+  cursor:pointer; padding:10px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center;
+  transition:transform .08s, box-shadow .08s, filter .2s; max-width:100%;
+  font-size:1rem; /* evita que el body grande desordene textos */
+}
+.pueblo-img,.comercio-img{
+  width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:10px; background:#fff;
+  border:2px solid #d5a35d; max-width:200px; max-height:200px;
+}
+.pueblo-nombre{
+  font-weight:700; font-size:clamp(1rem,3.4vw,2rem); color:#6a3f28;
+  /* PATCH: truncado compatible */
+  margin-top:6px; padding:0 6px; text-align:center; line-height:1.1; max-width:100%;
+  overflow:hidden; text-overflow:ellipsis;
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2;
+  line-clamp:2; /* estándar */
+}
+.pueblo-card:hover,.comercio-card:hover{ transform:translateY(-2px); box-shadow:0 6px 0 var(--c-card-top),0 10px 18px rgba(0,0,0,.18); }
+.pueblo-card:active,.comercio-card:active{ transform:translateY(0); box-shadow:0 3px 0 var(--c-card-top),0 6px 12px rgba(0,0,0,.12); }
+
+/* =========================
+   🚫 Deshabilitadas (limpias y claras)
+========================= */
+/* PATCH: eliminar versión oscura duplicada y unificar look claro */
+.pueblo-card:disabled,.comercio-card:disabled{
+  background:#f0e4c7; border-color:#d6c18d; filter:none;
+  cursor:not-allowed; position:relative;
+  box-shadow:0 4px 0 #bba470, 0 6px 12px rgba(0,0,0,.1);
+}
+/* velo sutil siempre, y candado */
+.pueblo-card:disabled::after,.comercio-card:disabled::after{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:rgba(255,255,255,.35); pointer-events:none;
+}
+.comercio-card:disabled::before{
+  content:"🔒"; position:absolute; top:68%; right:8px; font-size:1.2rem; opacity:.7;
+}
+/* tooltips al hover (sobrescriben el velo con texto) */
+.comercio-card.compra:disabled:hover::after{ content:"Te faltan monedas"; background:rgba(255,255,255,.6); display:flex; align-items:center; justify-content:center; font-weight:bold; color:#6a3f28; font-size:1.1rem; }
+.comercio-card.venta:disabled:hover::after{ content:"Material faltante";  background:rgba(255,255,255,.6); display:flex; align-items:center; justify-content:center; font-weight:bold; color:#6a3f28; font-size:1.1rem; }
+
+/* =========================
+   ✅ Habilitadas (COMBO 2)
+========================= */
+.comercio-card.compra:not(:disabled){
+  border-color:var(--c-compra-bd); background:var(--c-compra-bg);
+  box-shadow:0 4px 0 var(--c-compra-sh),0 6px 14px rgba(0,0,0,.15);
+}
+.comercio-card.compra:not(:disabled):hover{ transform:translateY(-2px); box-shadow:0 6px 0 var(--c-compra-sh),0 10px 18px rgba(0,0,0,.18); }
+.comercio-card.compra:not(:disabled):active{ box-shadow:0 3px 0 #70332a,0 6px 12px rgba(0,0,0,.12); }
+.comercio-card.compra:not(:disabled) .comercio-img{ border-color:var(--c-compra-bd); }
+.comercio-card.compra:not(:disabled):focus-visible{ outline:3px solid var(--c-compra-bd); outline-offset:3px; }
+
+.comercio-card.venta:not(:disabled){
+  border-color:var(--c-venta-bd); background:var(--c-venta-bg);
+  box-shadow:0 4px 0 var(--c-venta-sh),0 6px 14px rgba(0,0,0,.15);
+}
+.comercio-card.venta:not(:disabled):hover{ transform:translateY(-2px); box-shadow:0 6px 0 var(--c-venta-sh),0 10px 18px rgba(0,0,0,.18); }
+.comercio-card.venta:not(:disabled):active{ box-shadow:0 3px 0 #43572c,0 6px 12px rgba(0,0,0,.12); }
+.comercio-card.venta:not(:disabled) .comercio-img{ border-color:var(--c-venta-bd); }
+.comercio-card.venta:not(:disabled):focus-visible{ outline:3px solid var(--c-venta-bd); outline-offset:3px; }
+
+/* =========================
+   🔘 Botones (no menú/cards)
+========================= */
+button:not(.menu-btn):not(.pueblo-card):not(.comercio-card){
+  display:block; margin:12px auto; padding:10px 22px; border:none; border-radius:var(--r-s);
+  background:var(--c-btn); color:#fff; font-weight:600; font-size:1rem; cursor:pointer;
+  box-shadow:var(--sh-1); transition:transform .2s, box-shadow .2s, background .2s;
+  font-family:'Georgia',serif;
+}
+button:not(.menu-btn):not(.pueblo-card):not(.comercio-card):hover{ background:var(--c-btn-hover); transform:translateY(-2px); box-shadow:var(--sh-2); }
+button:not(.menu-btn):not(.pueblo-card):not(.comercio-card):active{ transform:translateY(1px); background:var(--c-btn-active); }
+button:disabled{
+  background:#f7e9c9; border-top:4px solid #d0d0d0; color:#a08a6a; cursor:not-allowed; opacity:.9;
+  box-shadow:0 3px 0 #b8b8b8,0 6px 12px rgba(0,0,0,.1);
+}
+
+/* =========================
+   🧭 Menú de inicio
+========================= */
+.menu-wrapper{ display:flex; justify-content:center; align-items:center; min-height:100vh; }
+.menu-contenedor{
+  display:flex; flex-direction:column; align-items:center; gap:20px;
+  width:min(90vw,360px); padding:clamp(20px,5vw,40px);
+  background:rgba(253,247,227,.95); border-radius:var(--r-xl);
+  box-shadow:0 5px 20px rgba(0,0,0,.3);
+}
+.menu-btn{
+  width:100%; background:#f5e6cc; border:2px solid var(--c-bd1); border-radius:12px;
+  padding:12px 0; font-size:1.1rem; font-weight:bold; color:var(--c-text);
+  cursor:pointer; transition:all .3s ease; box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+.menu-btn:hover{ background:#e7c079; color:#6a3f28; transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.25); }
+.menu-btn:active{ background:#b85c1e; color:#fff; transform:translateY(1px); }
+
+/* =========================
+   🌄 Fondos por pantalla
+========================= */
+body.bg-minero  { --bg-url:url("https://i.postimg.cc/KYgBVTvr/pueblo-minero-fondo.png"); }
+body.bg-forja   { --bg-url:url("https://i.postimg.cc/L4B9DsRq/pueblo-herrero-fondo.png"); }
+body.bg-joyeros { --bg-url:url("https://i.postimg.cc/BbqRv4jb/joyeros-fondo.png"); }
+body.bg-castillo{ --bg-url:url("https://i.postimg.cc/gJWsHsq6/Medieval-Castle-and-Market-Stall.png"); }
+
+/* =========================
+   📱 Responsivo extra
+========================= */
+@media (max-width:480px){
+  .recursos1{ max-width:94%; padding:8px 12px; }
+  .comercio{ grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); }
+}
+
+/* =========================
+   🖥️ Desktop (orden de texto)
+========================= */
+@media (min-width:992px){
+  /* limpia y ordena filas dentro de commerce */
+  .comercio-card .item-texto,
+  .comercio-card .recurso-item{
+    display:flex; justify-content:center; align-items:center; gap:8px;
+    flex-wrap:nowrap; line-height:1.1; white-space:nowrap;
+  }
+  .comercio-card .item-texto>*,
+  .comercio-card .recurso-item>*{ flex:0 0 auto; min-width:0; }
+
+  /* pueblos: grid predecible y títulos legibles */
+  .pueblos{ grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:18px; }
+  .pueblo-card{ font-size:1rem; line-height:1.15; }
+  .pueblo-nombre{ font-size:1.05rem; }
+}
+
+/* =========================
+   🖥️ XL Desktop: 5 columnas y límites
+========================= */
+/* PATCH: había una regla previa con !important que impedía las 5 columnas.
+   Aquí forzamos 5 columnas y centramos ítems; además limitamos el ancho de la card
+   para que UNA SOLA card no se estire. */
+@media (min-width:1200px){
+  .contenedor,.contenedor2,.comercio{
+    width:min(100%,1280px); margin-inline:auto;
+  }
+  .comercio{
+    grid-template-columns:repeat(5,minmax(200px,1fr)) !important; /* PATCH: prioridad sobre auto-fit */
+    gap:16px; justify-content:center; justify-items:center;       /* centra el grid y cada card */
+  }
+  .comercio-card{
+    width:auto !important;       /* PATCH: quitar 100% forzado en reglas previas */
+    max-width:360px !important;  /* PATCH: límite razonable de ancho */
+    justify-self:center;         /* centra dentro de su columna */
+  }
+  /* Si queda solo 1 card, colócala en columna única centrada */
+  .comercio:has(> .comercio-card:only-child){
+    grid-template-columns:minmax(220px,360px) !important; /* PATCH: 1 columna */
+  }
+}
+
+/* =========================
+   🧘 Accesibilidad / motion
+========================= */
+@media (prefers-reduced-motion:reduce){
+  *{ transition:none !important; animation:none !important; }
+}
+/* =========================
+   PATCH 1 — Pueblos: que la imagen crezca con la card
+   (quitamos el tope de 200px SOLO para pueblos)
+========================= */
+.pueblo-img{
+  width: 100% !important;
+  aspect-ratio: 1 / 1 !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* La card de pueblo rellena su columna y puede crecer un poco más en desktop */
+.pueblo-card{
+  width: 100% !important;
+  max-width: 420px;             /* límite razonable para que no se haga gigante */
+}
+@media (min-width: 1200px){
+  .pueblo-card{ max-width: 480px; }
+}
+
+/* =========================
+   PATCH 2 — Comercio: centrar y evitar estiramientos
+   (usamos tracks por contenido, no 1fr)
+========================= */
+/* Centrado general en tamaños intermedios */
+@media (min-width: 768px) and (max-width: 1199.98px){
+  .comercio{
+    grid-template-columns: repeat(auto-fit, minmax(200px, max-content)) !important;
+    justify-content: center !important;
+    justify-items: center !important;
+  }
+  .comercio-card{
+    width: auto !important;
+    max-width: 260px !important;
+    justify-self: center !important;
+  }
+}
+
+/* Escritorio grande: 5 columnas centradas por contenido (NO 1fr) */
+@media (min-width: 1200px){
+  .contenedor,
+  .contenedor2,
+  .comercio{
+    width: min(100%, 1280px);
+    margin-inline: auto;
+  }
+  .comercio{
+    grid-template-columns: repeat(5, minmax(220px, max-content)) !important; /* ← clave: no 1fr */
+    justify-content: center !important;
+    justify-items: center !important;
+    gap: 16px;
+  }
+  .comercio-card{
+    width: auto !important;
+    max-width: 260px !important;   /* ancho real de cada card */
+    justify-self: center !important;
+  }
+}
+
+/* (Opcional) Una sola card de comercio: 1 columna centrada, ancho agradable */
+@media (min-width: 1200px){
+  .comercio:has(> .comercio-card:only-child){
+    grid-template-columns: minmax(220px, 360px) !important;
+  }
+}
+/* Si necesitas compatibilidad sin :has(), añade la clase .is-single por JS y usa: 
+@media (min-width:1200px){
+  .comercio.is-single{ grid-template-columns:minmax(220px,360px) !important; }
+} */

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pueblo de la Forja</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-forja">
+    <div class="contenedor">
+        <h2>Pueblo de la Forja</h2>
+        <div class="recursos1">
+            <div> 
+                <lable>Nivel:</lable>
+                <span id="nivel">0</span>
+            </div>
+            <div class="item-texto"> 
+                <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">
+                <span id="coin">0</span>
+                <lable>/</lable>
+                <span id="coinnivel">10</span>
+            </div>
+            <div>
+                <lable>Días restantes:</lable>
+                <span id="dias">0</span>
+            </div>
+        </div>
+        <div class="recursos">
+            <div class="columna">
+                <div class="nombre-recurso">
+                    <div class="recurso-item barato">
+                        <img src="https://i.postimg.cc/RhbCPM08/Carbon.png" alt="Carbón" class="icono-recurso">
+                        <lable> Carbón</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/02F2D2FK/hierro.png" alt="Hierro" class="icono-recurso">
+                        <lable> Hierro</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/XJwHPXQz/menaoro.png" alt="Mena de Oro" class="icono-recurso nivel2">
+                        <lable class="nivel2"> Mena de Oro</lable> 
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/13FRH11C/Anillo.png" alt="Anillo" class="icono-recurso nivel3">
+                        <lable class="nivel3"> Anillo de Oro</lable>
+                    </div>
+                </div>
+                <div class="cantidad-recurso">
+                    <div class="recurso-item barato">
+                        <span id="madera" class="cantidad-recurso">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="hierro">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="menaoro" class="nivel2">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="anillo" class="nivel3">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="columna">
+                <div class="nombre-recurso">
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/wxWBxkkV/pico.png" alt="Picos" class="icono-recurso">
+                        <lable> Pico</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/63X7kLXX/lingoteoro.png" alt="Lingote de Oro" class="icono-recurso nivel2">
+                        <lable class="nivel2"> Lingote de Oro</lable>
+                    </div>
+                    <div class="recurso-item">
+                        <img src="https://i.postimg.cc/4ddrWphf/corona.png" alt="Corona" class="icono-recurso nivel3">
+                        <lable class="nivel3"> Corona Real</lable>
+                    </div>
+                </div>
+                <div class="cantidad-recurso">
+                    <div class="recurso-item">
+                        <span id="hachas">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="lingoteoro" class="nivel2">0</span>
+                    </div>
+                    <div class="recurso-item">
+                        <span id="corona" class="nivel3">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="comercio">
+            <button id="mashachas" class="comercio-card compra" type="button">
+                <img class="comercio-img" src="https://i.postimg.cc/SK9tKqzh/Btnpico.png" alt="comprar pico">
+                <span class="pueblo-nombre item-texto">
+                    <span class="plus">+1</span> 
+                    <img src="https://i.postimg.cc/wxWBxkkV/pico.png" alt="pico" class="icono-recurso">&nbsp;
+                    <span class="minus">-3</span> 
+                    <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">
+                </span>
+            </button>
+            <button id="maslingoteoro" class="comercio-card nivel2 compra" type="button">
+                <img class="comercio-img" src="https://i.postimg.cc/bJz9k2vq/Btnlingoteoro.png" alt="comprar lingoteoro">
+                <span class="pueblo-nombre item-texto">
+                    <span class="plus">+1</span> 
+                    <img src="https://i.postimg.cc/63X7kLXX/lingoteoro.png" alt="lingoteoro" class="icono-recurso">&nbsp;
+                    <span class="minus">-12</span> 
+                    <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">
+                </span>
+            </button>
+            <button id="menosmadera" class="comercio-card venta barato" type="button">
+                <img class="comercio-img" src="https://i.postimg.cc/prqsNV1Y/Btncarbon.png" alt="comprar Carbón">
+                <span class="pueblo-nombre item-texto">
+                    <span class="plus">+3</span> 
+                    <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">&nbsp;
+                    <span class="minus">-1</span> 
+                    <img src="https://i.postimg.cc/RhbCPM08/Carbon.png" alt="Carbón" class="icono-recurso">
+                </span>
+            </button>
+            <button id="menoshierro" class="comercio-card venta" type="button">
+                <img class="comercio-img" src="https://i.postimg.cc/CLZTk33R/Btnhierro.png" alt="vender hierro">
+                <span class="pueblo-nombre item-texto">
+                    <span class="plus">+5</span> 
+                    <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">&nbsp;
+                    <span class="minus">-1</span> 
+                    <img src="https://i.postimg.cc/02F2D2FK/hierro.png" alt="hierro" class="icono-recurso">
+                </span>
+            </button>
+            <button id="menosmenaoro" class="comercio-card nivel2 venta" type="button">
+                <img class="comercio-img" src="https://i.postimg.cc/Hsfxy4hC/Btnmenaoro.png" alt="vender menaoro">
+                <span class="pueblo-nombre item-texto">
+                    <span class="plus">+12</span> 
+                    <img src="https://i.postimg.cc/9fzVr3FF/coin.png" alt="coin" class="icono-recurso">&nbsp;
+                    <span class="minus">-1</span> 
+                    <img src="https://i.postimg.cc/XJwHPXQz/menaoro.png" alt="menaoro" class="icono-recurso">
+                </span>
+            </button>
+        </div>
+        <button onclick="window.location.href='mapa.html'">Mapa</button>
+    </div>
+
+
+
+    <div id="custom-alert-overlay" class="hidden"></div>
+    <div id="custom-alert" class="hidden">
+        <div class="card">
+            <p id="custom-alert-msg"></p>
+            <button id="custom-alert-ok">OK</button>
+        </div>
+    </div>
+    <script src="app.js"></script>  
+</body>
+</html>
