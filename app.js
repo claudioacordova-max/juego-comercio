@@ -78,9 +78,9 @@ function mostrar (datos, tipo){
 //pide el valor de un recurso al servidor y lo actualiza en pantalla
 async function cargar (ruta, tipo){
     try {
-        response = await fetch (`http://localhost:3000/${ruta}`);
+        response = await fetch (`https://juego-comercio.onrender.com/${ruta}`);
         const data = await response.json();
-        mostrar (data, tipo);
+        await mostrar (data, tipo);
         
     }
     catch (error){
@@ -91,7 +91,7 @@ async function cargar (ruta, tipo){
 //habilita o desactiva los botones de comprar o vender segun los recursos de jugador
 async function comercio (valor, recurso, id){
     try {
-        response = await fetch (`http://localhost:3000/recursos`);
+        response = await fetch (`https://juego-comercio.onrender.com/recursos`);
         const data = await response.json();
         const boton = document.getElementById(id);
         if (boton){ 
@@ -107,14 +107,14 @@ async function comercio (valor, recurso, id){
 //aumenta o disminuye el valor de un recurso 
 async function modificar(recurso, valor){
   try {
-    const r = await fetch(`http://localhost:3000/recursos`, {
+    const r = await fetch(`https://juego-comercio.onrender.com/recursos`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ variable: recurso, valor })
     });
     const dataParcial = await r.json();
     mostrar(dataParcial, recurso);
-    const rs = await fetch('http://localhost:3000/recursos');
+    const rs = await fetch('https://juego-comercio.onrender.com/recursos');
     const estado = await rs.json();
 
     const dias  = Number(estado.dias);
@@ -137,7 +137,7 @@ async function modificar(recurso, valor){
 //establece el valor de un recurso en un recurso en un numero especifico 
 
 async function set(recurso, valor){
-  const r = await fetch(`http://localhost:3000/recursos/set`, {
+  const r = await fetch(`https://juego-comercio.onrender.com/recursos/set`, {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ variable: recurso, valor })
@@ -161,6 +161,16 @@ function click (id, recurso, valor){
     }    
 }
 
+// activa un botón de pueblo en el mapa y descuenta un día
+async function clickpueblo(id, htmlpueblo) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', async () => {
+            await modificar('dias', -1);
+            window.location.href = htmlpueblo;
+        });
+    }
+}
 //resetear nivel automatico
 
 async function reset (valorcoin, valormadera, valorhachas, valordias){
@@ -200,7 +210,7 @@ function btnreset (valor1, valor2, valor3){
 async function victoria(fullcoin, texto, coinnivel, diasnivel, nivelEsperado, pagina){
   if (subiendoNivel) return;
   try {
-    const response = await fetch(`http://localhost:3000/recursos`);
+    const response = await fetch(`https://juego-comercio.onrender.com/recursos`);
     const data = await response.json();
 
     if (data.nivel === nivelEsperado && data.coin >= fullcoin){
@@ -234,7 +244,7 @@ async function derrota (coinReset, diasReset){
 //victoria y derrota de cada nivel
 async function niveles(){
   try {
-    const r = await fetch('http://localhost:3000/recursos');
+    const r = await fetch('https://juego-comercio.onrender.com/recursos');
     const data = await r.json();
 
     const dias  = Number(data.dias);
@@ -260,10 +270,11 @@ async function niveles(){
 }
 //botones
 btnreset (2, 0, 0);
-click('pueblomadera', 'dias', -1);
-click('pueblohierro', 'dias', -1);
-click('pueblojoyas', 'dias', -1);
-click('castillo', 'dias', -1);
+
+clickpueblo('pueblomadera', 'pueblomadera.html');
+clickpueblo('pueblohierro', 'pueblohierro.html');
+clickpueblo('pueblojoyas', 'pueblojoyas.html');
+clickpueblo('castillo', 'castillo.html',);
 
 //todas las compras
 function compras (idboton, recurso, precio){
@@ -326,7 +337,7 @@ ocultar('.nivel3');
 
 async function desocultar (nivel, clase, coin, style){
     try {
-        response = await fetch (`http://localhost:3000/recursos`);
+        response = await fetch (`https://juego-comercio.onrender.com/recursos`);
         const data = await response.json();
         const elementosocultables = document.querySelectorAll(clase);
         if (nivel < data.nivel){
