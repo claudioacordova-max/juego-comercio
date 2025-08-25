@@ -64,32 +64,21 @@ app.put('/recursos', (req, res) => {
 });
 
 app.put('/recursos/set', (req, res) => {
-    const { variable, valor } = req.body;
+    const data = req.body;
 
-    if (variable === 'coin'){
-        coin = valor;
-    } else if (variable === 'hachas'){
-        hachas = valor;
-    }else if (variable === 'madera'){
-        madera = valor;
-    }else if (variable === 'dias'){
-        dias = valor;
-    }else if (variable === 'nivel'){
-        nivel = valor;
-    }else if (variable === 'hierro'){
-        hierro = valor;
-    }else if (variable === 'menaoro'){
-        menaoro = valor;
-    }else if (variable === 'lingoteoro'){
-        lingoteoro = valor;
-    }else if (variable === 'anillo'){
-        anillo = valor;
-    }else if (variable === 'corona'){
-        corona = valor;
-    }
-    res.json({coin, hachas, madera, dias, nivel, hierro, menaoro, lingoteoro, anillo, corona});
+    if ('coin' in data) coin = data.coin;
+    if ('hachas' in data) hachas = data.hachas;
+    if ('madera' in data) madera = data.madera;
+    if ('dias' in data) dias = data.dias;
+    if ('nivel' in data) nivel = data.nivel;
+    if ('hierro' in data) hierro = data.hierro;
+    if ('menaoro' in data) menaoro = data.menaoro;
+    if ('lingoteoro' in data) lingoteoro = data.lingoteoro;
+    if ('anillo' in data) anillo = data.anillo;
+    if ('corona' in data) corona = data.corona;
+
+    res.json({ coin, hachas, madera, dias, nivel, hierro, menaoro, lingoteoro, anillo, corona });
 });
-
 app.listen(port,() => {
     console.log(`Servidor corriendo en http:/localhost:${port}`);
 });
