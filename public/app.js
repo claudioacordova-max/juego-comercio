@@ -260,7 +260,7 @@ function bloqueo (id, recursoMayor, recursoMenor){
     boton.disabled = compararRecurso(recursoMayor, recursoMenor);    
   }        
 }
-//trigen derrota
+//trigger derrota
 async function derrota (){
   const comprovar = compararRecurso(1, obtenerValor('dias'))
   if (comprovar){
@@ -282,7 +282,7 @@ async function derrota (){
     }
   }
 }
-//trigen victoria
+//trigger victoria
 async function victoria (){
   if (1 === obtenerValor('nivel') && compararRecurso(obtenerValor('coin'), coin1)){
       modificartodo(2, dias2, 2);
@@ -325,17 +325,11 @@ function desocultar (nivel, clase, coin, style){
           elemento.style.display = style;
       });
      }
-    }
+    }      
 desocultar(1, '.nivel2', coin2, 'inline');
 desocultar(2, '.nivel3', coin3, 'inline');
 desocultar(2, '.barato', coin3, 'none');
-        
 
-
-
-desocultar(1, '.nivel2', coin2, 'inline');
-desocultar(2, '.nivel3', coin3, 'inline');
-desocultar(2, '.barato', coin3, 'none');
 function bloqueoscompra() {
   bloqueo('masmadera', madera, obtenerValor('coin'));
   bloqueo('mashachas', hachas, obtenerValor('coin'));
