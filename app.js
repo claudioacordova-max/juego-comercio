@@ -47,274 +47,260 @@ const dias1 = 6;
 const dias2 = 7;
 const dias3 = 12;
 
-//esperar cargar subidad de nivel
-let subiendoNivel = false;
-//bloque de botones 
-function bloqueo (){
-    comercio(madera, 'coin', 'masmadera');
-    comercio(hachas, 'coin', 'mashachas');
-    comercio(hierro, 'coin', 'mashierro');
-    comercio(menaoro, 'coin', 'masmenaoro');
-    comercio(lingoteoro, 'coin', 'maslingoteoro');
-    comercio(anillo, 'coin', 'masanillo');
-    comercio(corona, 'coin', 'mascorona');
-    comercio(1, 'madera', 'menosmadera');
-    comercio(1, 'hachas', 'menoshachas');
-    comercio(1, 'hierro', 'menoshierro');
-    comercio(1, 'menaoro', 'menosmenaoro');
-    comercio(1, 'lingoteoro', 'menoslingoteoro');
-    comercio(1, 'anillo', 'menosanillo');
-    comercio(1, 'corona', 'menoscorona');
-}
-//actualiza el valor del recurso en pantalla y bloqueo de botones
-function mostrar (datos, tipo){
-   var valor = document.getElementById(tipo);
-   if (valor) {
-    valor.innerText = datos[tipo];
-    bloqueo();
-   }   
-}
-
-//pide el valor de un recurso al servidor y lo actualiza en pantalla
-async function cargar (ruta, tipo){
-    try {
-        response = await fetch (`https://juego-comercio.onrender.com/${ruta}`);
-        const data = await response.json();
-        await mostrar (data, tipo);
-        
-    }
-    catch (error){
-        console.error("Error al obtener:", error)
-    }
-}
-
-//habilita o desactiva los botones de comprar o vender segun los recursos de jugador
-async function comercio (valor, recurso, id){
-    try {
-        response = await fetch (`https://juego-comercio.onrender.com/recursos`);
-        const data = await response.json();
-        const boton = document.getElementById(id);
-        if (boton){ 
-            boton.disabled = data[recurso] < valor;    
-        }        
-    }
-    catch (error){
-        console.error("Error al obtener:", error)
-    }
-}
-
-
-//aumenta o disminuye el valor de un recurso 
-async function modificar(recurso, valor){
+//poner los recursos en local Storage
+async function cargarecursos () {
   try {
-    const r = await fetch(`https://juego-comercio.onrender.com/recursos`, {
+    const respuesta = await fetch('https://juego-comercio.onrender.com/recursos')
+    const datos = await respuesta.json();
+    localStorage.setItem('recursosjuego',JSON.stringify(datos));
+    console.log('recursos guardados');
+  }
+  catch (error){
+    console.log('error al cargar recursos:', error)
+  }
+}
+//subir los recursos del local storage al
+async function setrecursos(){
+  const recursos = JSON.parse(localStorage.getItem('recursosjuego'));
+  if (recursos !== undefined){
+    try {
+      const r = await fetch(`https://juego-comercio.onrender.com/recursos/set`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ variable: recurso, valor })
-    });
-    const dataParcial = await r.json();
-    mostrar(dataParcial, recurso);
-    const rs = await fetch('https://juego-comercio.onrender.com/recursos');
-    const estado = await rs.json();
+      body: JSON.stringify({
+      "coin": recursos.coin,
+      "hachas": recursos.hachas,
+      "madera": recursos.madera,
+      "dias": recursos.dias,
+      "nivel": recursos.nivel,
+      "hierro": recursos.hierro,
+      "menaoro": recursos.menaoro,
+      "lingoteoro": recursos.lingoteoro,
+      "anillo": recursos.anillo,
+      "corona": recursos.corona 
+      })
+    });}
+      catch (error){
+      console.log('error al subir los recursos:', error)
+    }}
+}
 
-    const dias  = Number(estado.dias);
-    const nivel = Number(estado.nivel);
-    if (recurso === 'dias' && dias <= 0) {
-      const coinReset = (nivel === 1) ? 2 : (nivel === 2) ? 2 : 2;
-      const diasReset = (nivel === 1) ? dias1 : (nivel === 2) ? dias2 : dias3;
-      await derrota(coinReset, diasReset);
-      return estado;
+// modifica los recursos, permite sumar, restar e igualar
+function modificarRecurso(recurso, operacion, valor) {
+  const recursos = JSON.parse(localStorage.getItem('recursosjuego'));
+
+  if (recursos && recursos[recurso] !== undefined) {
+    switch (operacion) {
+      case "sumar":
+        recursos[recurso] += valor;
+        break;
+      case "restar":
+        recursos[recurso] -= valor;
+        break;
+      case "igualar":
+        recursos[recurso] = valor;
+        break;
+      default:
+        console.log("Operación no reconocida");
+        return;
     }
-    if (recurso === 'coin' || recurso === 'dias' || recurso === 'nivel') {
-      await niveles();
-    }
-    return estado;
-  } catch (e) {
-    console.error("Error en modificar:", e);
+    // Guardar de nuevo en localStorage
+    localStorage.setItem('recursosjuego', JSON.stringify(recursos));
+    console.log(`Nuevo valor de ${recurso}:`, recursos[recurso]);
+  } else {
+    console.log(`El recurso ${recurso} no existe en localStorage`);
   }
 }
 
-//establece el valor de un recurso en un recurso en un numero especifico 
-
-async function set(recurso, valor){
-  const r = await fetch(`https://juego-comercio.onrender.com/recursos/set`, {
-    method: 'PUT',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ variable: recurso, valor })
-  });
-  const data = await r.json();
-  mostrar(data, recurso);
-  if (recurso === 'coin' || recurso === 'dias' || recurso === 'nivel') {
-  niveles();
+//modificar todos los recursos 
+function modificartodo(valorcoin, numerodias, nivel) {
+   modificarRecurso('coin', 'igualar', valorcoin);
+   modificarRecurso('hachas', 'igualar', 0);
+   modificarRecurso('madera', 'igualar', 0);
+   modificarRecurso('dias', 'igualar', numerodias);
+   modificarRecurso('nivel', 'igualar', nivel);
+   modificarRecurso('hierro', 'igualar', 0);
+   modificarRecurso('menaoro', 'igualar', 0);
+   modificarRecurso('lingoteoro', 'igualar', 0);
+   modificarRecurso('anillo', 'igualar', 0);
+   modificarRecurso('corona', 'igualar', 0);
 }
-  return data;
+//modificar recursos por compra
+function comprar(recurso, precio) {
+  modificarRecurso(recurso, 'sumar', 1);
+  modificarRecurso('coin', 'restar', precio);
+  mostrarrecurso('coin');
 }
-
-//activa un boton de comprar o vender
-function click (id, recurso, valor){
+//modificar recursos por venta
+function vender (recurso, precio){
+    modificarRecurso(recurso, 'restar', 1);  
+    modificarRecurso('coin', 'sumar', precio);
+    mostrarrecurso('coin'); 
+}
+// activa un botón comprar
+async function clickcompar(id, recurso, precio) {
     const elemento = document.getElementById(id);
-    if (elemento){
-        elemento.addEventListener('click',() =>
-        {
-          modificar (recurso, valor); 
+    if (elemento) {
+        elemento.addEventListener('click', async () => {
+          comprar(recurso, precio);
+          mostrarrecurso(recurso);
+          bloqueoscompra();
+          bloqueosventa()
         });
-    }    
+    }
 }
-
-// activa un botón de pueblo en el mapa y descuenta un día
+// activa un botón vender
+async function clickvender(id, recurso, precio) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', async () => {
+          vender(recurso, precio);
+          mostrarrecurso(recurso);
+          victoria ()
+          bloqueoscompra();
+          bloqueosventa();
+        });
+    }
+}
+//bloquear botones 
+function bloquearpueblos (boolean){
+  document.getElementById('pueblomadera').disabled = boolean;
+  document.getElementById('pueblohierro').disabled = boolean;
+  document.getElementById('pueblojoyas').disabled = boolean;
+  document.getElementById('castillo').disabled = boolean;
+}
+// activa botones de pueblo
 async function clickpueblo(id, htmlpueblo) {
     const elemento = document.getElementById(id);
     if (elemento) {
         elemento.addEventListener('click', async () => {
-            await modificar('dias', -1);
-            window.location.href = htmlpueblo;
+          bloquearpueblos (true);
+          modificarRecurso('dias', 'restar', 1);
+          mostrarrecurso('dias');
+          await derrota ()
+          await setrecursos();
+          bloquearpueblos (false);
+          window.location.href = htmlpueblo;
         });
     }
 }
-//resetear nivel automatico
-
-async function reset (valorcoin, valormadera, valorhachas, valordias){
-  await set('coin',   valorcoin);
-  await set('madera', valormadera);
-  await set('hachas', valorhachas);
-  await set('dias',   valordias);
-  await set('hierro', 0);
-  await set('menaoro', 0);
-  await set('lingoteoro', 0);
-  await set('anillo', 0);
-  await set('corona', 0);
-}
-
-//boton de resetear nivel
-function btnreset (valor1, valor2, valor3){
-    const elemento = document.getElementById('reset');
-    if (elemento){
-        elemento.addEventListener('click', async () =>
-        {
-          await set ('coin', valor1);
-          await set ('madera', valor2);
-          await set ('hachas', valor3);
-          await set ('dias', dias1);
-          await set ('nivel', 1);  
-          await set ('hierro', 0); 
-          await set('menaoro', 0);
-          await set('lingoteoro', 0);
-          await set('anillo', 0);
-          await set('corona', 0);
-          window.location.href = 'lore.html';
+// activa boton de carga
+async function clickcargar(id, htmlpueblo) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', async () => {
+          await cargarecursos();
+          window.location.href = htmlpueblo;
         });
-    }    
-}
-
-//comprovar victoria
-async function victoria(fullcoin, texto, coinnivel, diasnivel, nivelEsperado, pagina){
-  if (subiendoNivel) return;
-  try {
-    const response = await fetch(`https://juego-comercio.onrender.com/recursos`);
-    const data = await response.json();
-
-    if (data.nivel === nivelEsperado && data.coin >= fullcoin){
-      subiendoNivel = true;
-      await veralerta(texto);
-      await modificar('nivel', 1);          
-      await set('coin', coinnivel);
-      await set('madera', 0);
-      await set('hachas', 0);
-      await set('hierro', 0);
-      await set('dias', diasnivel);
-      await set('menaoro', 0);
-      await set('lingoteoro', 0);
-      await set('anillo', 0);
-      await set('corona', 0);
-      window.location.href = pagina;
     }
-  } catch (e){
-    console.error(e);
+}
+// activa boton de reset
+async function clickreset(id, htmlpueblo) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', async () => {
+          await cargarecursos();
+          modificartodo(2, 6, 1);
+          await setrecursos();
+          window.location.href = htmlpueblo;
+        });
+    }
+}
+//mostar un recurso en pantalla
+function mostrarrecurso(recurso){
+  const recursos = JSON.parse(localStorage.getItem('recursosjuego'));
+  if (recursos && recursos[recurso] !== undefined){
+    console.log(recursos[recurso]);
+    var valor = document.getElementById(recurso);
+    if (valor){
+    valor.innerText = recursos[recurso];
+    }
+  } else {
+    console.log('No se encontro la propiedad coin en recursos');
   }
 }
+//ver todos los recursos en pantalla
+function mostartodoslosrecursos() {
+  mostrarrecurso('coin');
+  mostrarrecurso('dias');
+  mostrarrecurso('nivel');
+  mostrarrecurso('madera');
+  mostrarrecurso('hachas');
+  mostrarrecurso('hierro');
+  mostrarrecurso('menaoro');
+  mostrarrecurso('lingoteoro');
+  mostrarrecurso('anillo');
+  mostrarrecurso('corona');
+}
+mostartodoslosrecursos();
 
-//comprovar derrota
-async function derrota (coinReset, diasReset){
-  await veralerta('No alcanzaste a juntar lo suficiente. El Rey no perdona las deudas.');
-  await reset(coinReset, 0, 0, diasReset);
-  console.log('perdiste');
-  window.location.href = 'mapa.html';
+//obtener el valor de 1 recurso
+function obtenerValor(recurso) {
+  const recursos = JSON.parse(localStorage.getItem('recursosjuego'));
+  if (recursos && recursos[recurso] !== undefined){
+    console.log(recursos[recurso]);
+    return recursos[recurso];
+  }
+  return null; // no existe
+}
+//Comparar dos recursos
+function compararRecurso(recursoMayor, recursoMenor) {
+  const valorMayor = recursoMayor;
+  const valorMenor = recursoMenor;
+  if (valorMayor === null || valorMenor === null) {
+    return false; // alguno no existe
+  }
+  return valorMayor > valorMenor;
 }
 
-//victoria y derrota de cada nivel
-async function niveles(){
-  try {
-    const r = await fetch('https://juego-comercio.onrender.com/recursos');
-    const data = await r.json();
-
-    const dias  = Number(data.dias);
-    const nivel = Number(data.nivel);
-    const coin  = Number(data.coin);
-    if (dias <= 0) {
-      const coinReset = (nivel === 1) ? 2 : (nivel === 2) ? 2 : 3;
-      const diasReset = (nivel === 1) ? dias1 : (nivel === 2) ? dias2 : dias3;
-      await derrota(coinReset, diasReset);
-      return;
+//habilita o desactiva los botones de comprar o vender segun los recursos de jugador
+function bloqueo (id, recursoMayor, recursoMenor){
+  const boton = document.getElementById(id);
+  if (boton){
+    boton.disabled = compararRecurso(recursoMayor, recursoMenor);    
+  }        
+}
+//trigen derrota
+async function derrota (){
+  const comprovar = compararRecurso(1, obtenerValor('dias'))
+  if (comprovar){
+    if (1 === obtenerValor('nivel')){
+        modificartodo(2, dias1, 1);
+        await setrecursos();
+        await veralerta('No alcanzaste a juntar lo suficiente. El Rey no perdona las deudas.');
+        window.location.href = 'mapa.html';
+    } else if (2 === obtenerValor('nivel')){
+        modificartodo(2, dias2, 2);
+        await setrecursos();
+        await veralerta('No alcanzaste a juntar lo suficiente. El Rey no perdona las deudas.');
+        window.location.href = 'mapa.html';
+    }else if (3 === obtenerValor('nivel')){
+        modificartodo(3, dias3, 3);
+        await setrecursos();
+        await veralerta('No alcanzaste a juntar lo suficiente. El Rey no perdona las deudas.');
+        window.location.href = 'mapa.html';
     }
-    if (subiendoNivel) return;
-    if (nivel === 1) {
-      await victoria(coin1, 'Has cumplido el primer pago. El Rey espera impaciente el siguiente.', 2, dias2, 1, 'mapa.html');
-    } else if (nivel === 2) {
-      await victoria(coin2, 'Triunfaste de nuevo. Prepara el último pago.', 3, dias3, 2, 'mapa.html');
-    } else if (nivel === 3) {
-      await victoria(coin3, 'La deuda está saldada. Ahora el Rey exige tu presencia.', 0, 99, 3, 'lore2.html');
-    }
-  } catch (e) {
-    console.error('Error al evaluar niveles:', e);
   }
 }
-//botones
-btnreset (2, 0, 0);
-
-clickpueblo('pueblomadera', 'pueblomadera.html');
-clickpueblo('pueblohierro', 'pueblohierro.html');
-clickpueblo('pueblojoyas', 'pueblojoyas.html');
-clickpueblo('castillo', 'castillo.html',);
-
-//todas las compras
-function compras (idboton, recurso, precio){
-    click (idboton, 'coin', -precio);
-    click (idboton, recurso, 1);
+//trigen victoria
+async function victoria (){
+  if (1 === obtenerValor('nivel') && compararRecurso(obtenerValor('coin'), coin1)){
+      modificartodo(2, dias2, 2);
+      await setrecursos();
+      await veralerta('Has cumplido el primer pago. El Rey espera impaciente el siguiente.');
+      window.location.href = 'mapa.html';
+  } else if (2 === obtenerValor('nivel') && compararRecurso(obtenerValor('coin'), coin2)){
+      modificartodo(3, dias3, 3);
+      await setrecursos();
+      await veralerta('Triunfaste de nuevo. Prepara el último pago.');
+      window.location.href = 'mapa.html';
+  }else if (3 === obtenerValor('nivel') && compararRecurso(obtenerValor('coin'), coin3)){
+      modificartodo(0, 99, 3);
+      await setrecursos();
+      await veralerta('La deuda está saldada. Ahora el Rey exige tu presencia.');
+      window.location.href = 'lore2.html';
+  }
 }
-compras('masmadera','madera', madera);
-compras('mashachas','hachas', hachas);
-compras('mashierro','hierro', hierro);
-compras('masmenaoro','menaoro', menaoro);
-compras('maslingoteoro','lingoteoro', lingoteoro);
-compras('masanillo','anillo', anillo);
-compras('mascorona','corona', corona);
-//todas las ventas
-function ventas (idboton, recurso, precioventa){
-    click (idboton, 'coin', precioventa);
-    click (idboton, recurso, -1);
-}
-ventas('menosmadera', 'madera', maderaventa);
-ventas('menoshachas', 'hachas', hachasventa);
-ventas('menoshierro', 'hierro', hierroventa);
-ventas('menosmenaoro', 'menaoro', menaoroventa);
-ventas('menoslingoteoro', 'lingoteoro', lingoteoroventa);
-ventas('menosanillo', 'anillo', anilloventa);
-ventas('menoscorona', 'corona', coronaventa);
-
-//carga de los recursos al cambiar de pagina 
-cargar('recursos','coin');
-cargar('recursos','hachas');
-cargar('recursos','madera');
-cargar('recursos', 'dias');
-cargar('recursos', 'nivel');
-cargar('recursos', 'hierro');
-cargar('recursos','menaoro');
-cargar('recursos', 'lingoteoro');
-cargar('recursos', 'anillo');
-cargar('recursos', 'corona');
-
-niveles();
-
 //mostar los coin nesesarios por nivel
 function coinnivel (coin){
      var valor = document.getElementById('coinnivel');
@@ -322,7 +308,6 @@ function coinnivel (coin){
     valor.innerText = (coin + 1);  
   } 
 }
-
 //ocultar pueblos y recursos hasta los niveles nesesarios
 function ocultar (nivel){
   const elementosocultables = document.querySelectorAll(nivel);
@@ -330,33 +315,91 @@ function ocultar (nivel){
     elemento.style.display = 'none';
   });
 }
-
 ocultar('.nivel2');
 ocultar('.nivel3');
-
-
-async function desocultar (nivel, clase, coin, style){
-    try {
-        response = await fetch (`https://juego-comercio.onrender.com/recursos`);
-        const data = await response.json();
+function desocultar (nivel, clase, coin, style){
         const elementosocultables = document.querySelectorAll(clase);
-        if (nivel < data.nivel){
+        if (nivel < obtenerValor('nivel')){
           coinnivel(coin);
           elementosocultables.forEach(elemento => {
           elemento.style.display = style;
       });
      }
-        
-        
     }
-    catch (error){
-        console.error("Error al obtener:", error)
-    }
-}
+desocultar(1, '.nivel2', coin2, 'inline');
+desocultar(2, '.nivel3', coin3, 'inline');
+desocultar(2, '.barato', coin3, 'none');
+        
+
+
 
 desocultar(1, '.nivel2', coin2, 'inline');
 desocultar(2, '.nivel3', coin3, 'inline');
 desocultar(2, '.barato', coin3, 'none');
+function bloqueoscompra() {
+  bloqueo('masmadera', madera, obtenerValor('coin'));
+  bloqueo('mashachas', hachas, obtenerValor('coin'));
+  bloqueo('mashierro', hierro, obtenerValor('coin'));
+  bloqueo('masmenaoro', menaoro, obtenerValor('coin'));
+  bloqueo('maslingoteoro', lingoteoro, obtenerValor('coin'));
+  bloqueo('masanillo', anillo, obtenerValor('coin'));
+  bloqueo('mascorona', corona, obtenerValor('coin'));
+}
+function bloqueosventa() {
+  bloqueo('menosmadera', 1, obtenerValor('madera'));
+  bloqueo('menoshachas', 1, obtenerValor('hachas')); 
+  bloqueo('menoshierro', 1, obtenerValor('hierro')); 
+  bloqueo('menosmenaoro', 1, obtenerValor('menaoro')); 
+  bloqueo('menoslingoteoro', 1, obtenerValor('lingoteoro')); 
+  bloqueo('menosanillo', 1, obtenerValor('anillo')); 
+  bloqueo('menoscorona', 1, obtenerValor('corona'));   
+}
+bloqueoscompra();
+bloqueosventa();
+
+//botones pueblos
+clickpueblo('pueblomadera', 'pueblomadera.html');
+clickpueblo('pueblohierro', 'pueblohierro.html');
+clickpueblo('pueblojoyas', 'pueblojoyas.html');
+clickpueblo('castillo', 'castillo.html');
+//botones compra
+clickcompar('masmadera', 'madera', madera);
+clickcompar('mashachas', 'hachas', hachas);
+clickcompar('mashierro', 'hierro', hierro);
+clickcompar('masmenaoro', 'menaoro', menaoro);
+clickcompar('maslingoteoro', 'lingoteoro', lingoteoro);
+clickcompar('masanillo', 'anillo', anillo);
+clickcompar('mascorona', 'corona', corona);
+//botones venta
+clickvender('menosmadera', 'madera', maderaventa);
+clickvender('menoshachas', 'hachas', hachasventa);
+clickvender('menoshierro', 'hierro', hierroventa);
+clickvender('menosmenaoro', 'menaoro', menaoroventa);
+clickvender('menoslingoteoro', 'lingoteoro', lingoteoroventa);
+clickvender('menosanillo', 'anillo', anilloventa);
+clickvender('menoscorona', 'corona', coronaventa);
+//botones menu
+clickcargar('continuar', 'mapa.html');
+clickreset('reset', 'mapa.html');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
