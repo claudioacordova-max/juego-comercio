@@ -374,7 +374,7 @@ clickvender('menosanillo', 'anillo', anilloventa);
 clickvender('menoscorona', 'corona', coronaventa);
 //botones menu
 clickcargar('continuar', 'mapa.html');
-clickreset('reset', 'mapa.html');
+clickreset('reset', 'lore.html');
 
 
 
